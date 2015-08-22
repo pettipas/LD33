@@ -39,6 +39,8 @@ public class EyeWeapon : MonoBehaviour {
 		if(Vector3.Distance(curser.transform.position,transform.position)>deadZone){
 			Quaternion lookat = Quaternion.LookRotation((curser.transform.position-transform.position).normalized);
 			transform.rotation = Quaternion.RotateTowards(transform.rotation,lookat,degreeDelta);
+		}else {
+			transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.identity,degreeDelta);
 		}
 	}
 
