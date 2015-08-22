@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CockPitSwagger : MonoBehaviour {
 
 	public List<Transform> influence = new List<Transform>();
-
+	public float cockPitOffSet =  1.5f;
 	public void Update(){
 		Vector3 averagePos = Vector3.zero;
 
@@ -14,6 +14,6 @@ public class CockPitSwagger : MonoBehaviour {
 		});
 
 		averagePos = averagePos/influence.Count;
-		transform.position = new Vector3(averagePos.x,transform.position.y,averagePos.z);
+		transform.position = new Vector3(averagePos.x,averagePos.y + cockPitOffSet,averagePos.z);
 	}
 }

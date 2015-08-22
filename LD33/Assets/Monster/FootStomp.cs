@@ -26,6 +26,8 @@ public class FootStomp : MonoBehaviour {
 		maxDampenTime = dampenTime;
 	}
 
+	public float detectedHeight = 0;
+
 	public void Update(){
 		Vector3 targetPosition = target.transform.position;
 		foot.position = Vector3.SmoothDamp(foot.position, new Vector3(targetPosition.x, targetPosition.y, targetPosition.z), ref dampingVelocity,maxDampenTime);
@@ -45,11 +47,15 @@ public class FootStomp : MonoBehaviour {
 		while(t < 1){
 			t+=dt*Time.deltaTime * 5.0f;
 			target.position = Vector3.Lerp(start,goal,t);
+			RaycastHit hit;
+			if(Physics.Raycast(target.position,-target.transform.up,out hit,Mathf.Infinity)){
+				detectedHeight = hit.point.y;
+			}
 			yield return null;
 		}
 		yield return new WaitForSeconds(1.5f);
 		maxDampenTime = 0.1f;
-		target.position+=new Vector3(0,-stepHeight,0);
+		target.position =new Vector3(target.position.x,detectedHeight+1,target.position.z);
 	
 		while(Vector3.Distance(foot.position,target.position) > 0.2f){
 			yield return null;
