@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class FootStomp : MonoBehaviour {
-	
+
+	public static float dampenTime = 1f;
 	bool stepping;
 	public Transform target;
 	public Transform foot;
@@ -19,6 +20,10 @@ public class FootStomp : MonoBehaviour {
 		get{
 			return stepping;
 		}
+	}
+
+	public void Awake(){
+		maxDampenTime = dampenTime;
 	}
 
 	public void Update(){
