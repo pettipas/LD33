@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
+
 public class EyeWeapon : MonoBehaviour {
 
 	public GameObject curser;
