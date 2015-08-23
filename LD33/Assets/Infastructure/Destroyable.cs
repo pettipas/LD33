@@ -3,15 +3,19 @@ using System.Collections;
 
 public class Destroyable : MonoBehaviour {
 
+	public Transform plant;
+
 	public int health = 100;
 	int lastHealth = 0; 
 	public Transform firstHit;
 	public Transform lastHit;
 	public Transform normal;
+	public Transform alienPlant;
 
 	public ParticleSystem firstHitEmmiter;
 	public ParticleSystem lastHitEmmiter;
 	public ParticleSystem smokeEmmiter;
+	public ParticleSystem plantEmmitter;
 	bool firstHitSwitch = false;
 	bool lasthitSwitch = false;
 
@@ -48,10 +52,25 @@ public class Destroyable : MonoBehaviour {
 		lastHealth = health;
 	}
 
+	public void TryGrow(){
+		if(alienPlant != null && !alienPlant.gameObject.activeSelf){
+			alienPlant.gameObject.SetActive(true);
+			plantEmmitter.Emit(10);
+			plantEmmitter.Emit(5);
+		}
+
+		if(plant != null){
+			plant.gameObject.SetActive(true);
+		}
+	}
+
 	public void FullHelath(){
 		normal.gameObject.SetActive(true);
 		firstHit.gameObject.SetActive(false);
 		lastHit.gameObject.SetActive(false);
+		if(alienPlant != null){
+			alienPlant.gameObject.SetActive(false);
+		}
 	}
 
 	public void FireFirstHit(){
@@ -78,6 +97,7 @@ public class Destroyable : MonoBehaviour {
 			timer+=Time.deltaTime;
 			yield return null;
 		}
+		TryGrow();
 	}
 
 }
