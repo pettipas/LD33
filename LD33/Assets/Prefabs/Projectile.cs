@@ -9,6 +9,8 @@ public class Projectile : MonoBehaviour {
 	bool Launched = false;
 
 	Transform myTarget;
+	float timer = 0;
+	float lifeTime = 10;
 
 	public void Launch(Transform target){
 		dir = (target.position-transform.position).normalized;
@@ -21,6 +23,8 @@ public class Projectile : MonoBehaviour {
 		if(!Launched){
 			return;
 		}
+		timer+=Time.deltaTime;
+
 		transform.position+=dir*speed*Time.smoothDeltaTime;
 
 		if(Close){
@@ -28,6 +32,10 @@ public class Projectile : MonoBehaviour {
 			if(h != null){
 				h.DoDamage(damage);
 			}
+			Destroy(gameObject);
+		}
+
+		if(timer > lifeTime && gameObject!=null){
 			Destroy(gameObject);
 		}
 	}

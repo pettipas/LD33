@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
+	public int health = 100;
 	public AudioSource shot;
 	public AudioSource motion;
 	public Animator animaton;
@@ -13,24 +14,74 @@ public class Enemy : MonoBehaviour {
 	public float shotTimer;
 	public float closeenough;
 
+	public Transform geometry;
+	public Transform deathPose;
+	public ParticleSystem plantBlood;
+	public ParticleSystem smoke;
+	public ParticleSystem fire;
+	public AudioSource plantSound;
+
 	void Start(){
+		lastHealth = health;
 		target = Control.PlayerInstance.GetComponentInChildren<EyeWeapon>().gameObject;
 		StartCoroutine(ShootWhenClose());
 	}
-
+	int lastHealth;
+	bool started;
 	void Update () {
+
+		if(started){
+			return;
+		}
+
 		if(target != null && !CloseEnough){
 			PlayWalk();
 			agent.updateRotation = true;
+			agent.Resume();
 			agent.SetDestination(target.transform.position);
-		}
-
-		if(CloseEnough){
+		}else if(CloseEnough){
 			PLayRest();
 			agent.updateRotation = false;
 			agent.Stop();
 			FaceOpponent();
 		}
+
+		if(health <= 0 && !started){
+			agent.Stop();
+			started = true;
+			StartCoroutine(DeathRoutine());
+		}
+
+		if(!started && health!= lastHealth){
+			Hit();
+		}
+
+		lastHealth = health;
+	}
+
+	public void Hit(){
+		if(fire != null && Random.value > 0.6f){
+			fire.Emit(3);
+		}
+	}
+
+	public IEnumerator DeathRoutine(){
+
+		if(smoke != null){
+			smoke.Emit (10);
+		}
+		if(fire != null){
+			fire.Emit(10);
+		}
+
+		plantSound.Play();
+		yield return new WaitForSeconds(1.0f);
+		geometry.gameObject.SetActive(false);
+		deathPose.gameObject.SetActive(true);
+		plantBlood.Emit(10);
+		yield return new WaitForSeconds(10.0f);
+		Destroy(gameObject);
+		deathPose.parent = null;
 	}
 
 	void PlayWalk(){
@@ -38,7 +89,7 @@ public class Enemy : MonoBehaviour {
 			motion.Play();
 		}
 		if(animaton != null){
-			animaton.Play("walk");
+			animaton.Play("walks");
 		}
 	}
 	void PLayRest(){
@@ -75,6 +126,9 @@ public class Enemy : MonoBehaviour {
 
 
 	IEnumerator ShootWhenClose(){
+		if(started){
+			yield break;
+		}
 		if(CloseEnoughToShoot){
 			shot.loop = false;
 			shot.Play();

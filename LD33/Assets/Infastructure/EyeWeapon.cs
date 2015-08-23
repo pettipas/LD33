@@ -43,8 +43,12 @@ public class EyeWeapon : MonoBehaviour {
 			List<RaycastHit> hits = blaster.CastAll();
 			for(int i=0; i < hits.Count;i++){
 				Destroyable dest = hits[i].transform.gameObject.GetComponentInParent<Destroyable>();
+				Enemy enemy = hits[i].transform.gameObject.GetComponentInParent<Enemy>();
 				if(dest != null){
 					dest.health--;
+				}
+				if(enemy != null){
+					enemy.health--;
 				}
 				effect.transform.position = hits[i].point;
 				effect.Emit(5);
