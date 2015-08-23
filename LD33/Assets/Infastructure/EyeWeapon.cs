@@ -16,11 +16,8 @@ public class EyeWeapon : MonoBehaviour {
 	float degreeDelta = 3.0f;
 	public float ideal = 3.0f;
 	public float fireing = 1.0f;
-
 	public ParticleSystem effect;
-	public void Awake(){
 
-	}
 	public void Update(){
 		Camera main = Camera.main;
 		if(main == null){

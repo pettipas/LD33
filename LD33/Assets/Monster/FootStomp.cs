@@ -3,6 +3,7 @@ using System.Collections;
 
 public class FootStomp : MonoBehaviour {
 
+	public AudioSource audioSource;
 	public static float dampenTime = 1f;
 	bool stepping;
 	public Transform target;
@@ -35,6 +36,7 @@ public class FootStomp : MonoBehaviour {
 	}
 
 	public IEnumerator Step(float duration, float stepHeight, float stride, Vector3 dir){
+		audioSource.Play();
 		Vector3 goal = foot.transform.position + dir * stride;
 		maxDampenTime = 1.0f;
 		target.position = foot.transform.position;
@@ -64,36 +66,47 @@ public class FootStomp : MonoBehaviour {
 
 	public void SetHeight(){
 		detectedHeight = 0;
+		RaycastHit takenHit;
 		RaycastHit hit;
 		if(Physics.Raycast(target.position+ new Vector3(0,0,0),-target.transform.up,out hit,Mathf.Infinity)){
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
+				takenHit = hit;
 			}
         }
 
 		if(Physics.Raycast(target.position + new Vector3(footPrint,0,footPrint),-target.transform.up,out hit,Mathf.Infinity)){
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
+				takenHit = hit;
             }
         }
 
 		if(Physics.Raycast(target.position + new Vector3(-footPrint,0,footPrint),-target.transform.up,out hit,Mathf.Infinity)){
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
+				takenHit = hit;
             }
         }
 
 		if(Physics.Raycast(target.position + new Vector3(footPrint,0,-footPrint),-target.transform.up,out hit,Mathf.Infinity)){
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
+				takenHit = hit;
             }
         }
 
 		if(Physics.Raycast(target.position + new Vector3(-footPrint,0,-footPrint),-target.transform.up,out hit,Mathf.Infinity)){
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
+				takenHit = hit;
             }
         }
+
+		Destroyable dest = takenHit.transform.GetComponentInParent<Destroyable>();
+		if(dest !=null){
+			dest.health-=10;
+		}
 	}
 
 	public void OnDrawGizmos(){
