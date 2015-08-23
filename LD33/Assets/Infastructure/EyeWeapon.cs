@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 public class EyeWeapon : MonoBehaviour {
 
+	public AudioSource mcbeam;
+	public AudioSource beamstart;
+	public AudioSource beamStop;
+	public Blaster blaster;
 	public GameObject curser;
 	public Transform hitObject;
 	public float deadZone;
@@ -12,6 +16,11 @@ public class EyeWeapon : MonoBehaviour {
 	float degreeDelta = 3.0f;
 	public float ideal = 3.0f;
 	public float fireing = 1.0f;
+
+	public ParticleSystem effect;
+	public void Awake(){
+
+	}
 	public void Update(){
 		Camera main = Camera.main;
 		if(main == null){
@@ -19,13 +28,30 @@ public class EyeWeapon : MonoBehaviour {
 		}
 
 		if(Input.GetMouseButtonDown(0) && !beamRenderer.enabled){
+			mcbeam.Play();
+			beamstart.Play(); 
 			beamRenderer.enabled = true;
 			degreeDelta = fireing;
 		}
 
 		if(Input.GetMouseButtonUp(0) && beamRenderer.enabled){
+			mcbeam.Stop();
+			beamStop.Play();
 			beamRenderer.enabled = false;
 			degreeDelta = ideal;
+		}
+
+		if(beamRenderer.enabled){
+
+			List<RaycastHit> hits = blaster.CastAll();
+			for(int i=0; i < hits.Count;i++){
+				Destroyable dest = hits[i].transform.gameObject.GetComponentInParent<Destroyable>();
+				if(dest != null){
+					dest.health--;
+				}
+				effect.transform.position = hits[i].point;
+				effect.Emit(5);
+			}
 		}
 
 		Ray ray = main.ScreenPointToRay(Input.mousePosition);
@@ -43,6 +69,7 @@ public class EyeWeapon : MonoBehaviour {
 			transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.identity,degreeDelta);
 		}
 	}
+
 
 	public void OnDrawGizmos(){
 		Gizmos.DrawWireSphere(new Vector3(transform.position.x,0,transform.position.z),deadZone);
