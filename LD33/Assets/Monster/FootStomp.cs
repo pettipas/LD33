@@ -63,15 +63,17 @@ public class FootStomp : MonoBehaviour {
 		foot.position = target.position;
 		stepping = false;
 	}
-
+	bool hitDetected = false;
 	public void SetHeight(){
 		detectedHeight = 0;
 		RaycastHit takenHit;
 		RaycastHit hit;
+		hitDetected = false;
 		if(Physics.Raycast(target.position+ new Vector3(0,0,0),-target.transform.up,out hit,Mathf.Infinity)){
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
 				takenHit = hit;
+				hitDetected = true;
 			}
         }
 
@@ -79,6 +81,7 @@ public class FootStomp : MonoBehaviour {
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
 				takenHit = hit;
+				hitDetected = true;
             }
         }
 
@@ -86,6 +89,7 @@ public class FootStomp : MonoBehaviour {
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
 				takenHit = hit;
+				hitDetected = true;
             }
         }
 
@@ -93,6 +97,7 @@ public class FootStomp : MonoBehaviour {
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
 				takenHit = hit;
+				hitDetected = true;
             }
         }
 
@@ -100,13 +105,20 @@ public class FootStomp : MonoBehaviour {
 			if(hit.point.y >= detectedHeight){
 				detectedHeight = hit.point.y;
 				takenHit = hit;
+				hitDetected = true;
             }
         }
 
-		Destroyable dest = takenHit.transform.GetComponentInParent<Destroyable>();
-		if(dest !=null){
-			dest.health-=10;
+		if(hitDetected){
+			Destroyable dest = takenHit.transform.GetComponentInParent<Destroyable>();
+			if(dest !=null){
+				dest.health-=10;
+			}
 		}
+	}
+
+	public Vector3 PreviewPosition(Vector3 dir, float stride){
+		return foot.transform.position + dir * stride;
 	}
 
 	public void OnDrawGizmos(){

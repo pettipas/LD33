@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Control : MonoBehaviour {
 
-
+	public List<Renderer> boundaries = new List<Renderer>();
+	public List<Vector3> previews = new List<Vector3>(4);
 	public static Control PlayerInstance;
 
 	public FootStomp frontLeft;
@@ -28,17 +30,25 @@ public class Control : MonoBehaviour {
 
 	public void Update(){
 		if(Input.GetKey(KeyCode.W) && !running){
-			running = true;
-			StartCoroutine(Stride(Vector3.forward));
+			if(OkToGo(Vector3.forward)){
+				running = true;
+				StartCoroutine(Stride(Vector3.forward));
+			}
 		}else if(Input.GetKey(KeyCode.S) && !running){
-			running = true;
-			StartCoroutine(Stride(-Vector3.forward));
+            if(OkToGo(-Vector3.forward)){
+				running = true;
+				StartCoroutine(Stride(-Vector3.forward));
+			}
 		}else if(Input.GetKey(KeyCode.A) && !running){
-			running = true;
-			StartCoroutine(Stride(-Vector3.right));
+			if(OkToGo(-Vector3.right)){
+				running = true;
+				StartCoroutine(Stride(-Vector3.right));
+			}
 		}else if(Input.GetKey(KeyCode.D) && !running){
-			running = true;
-			StartCoroutine(Stride(Vector3.right));
+			if(OkToGo(Vector3.right)){
+				running = true;
+				StartCoroutine(Stride(Vector3.right));
+			}
 		}
 	}
 	bool flip;
@@ -60,5 +70,25 @@ public class Control : MonoBehaviour {
 	
 
 		running = false;
+	}
+
+	public bool OkToGo(Vector3 dir){
+
+		previews.Clear();
+
+		previews.Add(frontLeft.PreviewPosition(dir, strideWidth));
+		previews.Add(frontRight.PreviewPosition(dir, strideWidth));
+		previews.Add(rearLeft.PreviewPosition(dir, strideWidth));
+		previews.Add(rearRight.PreviewPosition(dir, strideWidth));
+
+		for(int i = 0; i < boundaries.Count; i++){
+			Renderer r = boundaries[i];
+			for(int j = 0; j < previews.Count; j++){
+				if(r.bounds.Contains(previews[j])){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
