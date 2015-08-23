@@ -9,11 +9,10 @@ public class Spawner : MonoBehaviour {
 
 	public List<Wave> waves = new List<Wave>();
 	public List<Transform> positions = new List<Transform>();
-	public List<float> times = new List<float>();
 	public GameObject tankPrefab;
 	public GameObject soliderPrefab;
 
-	public void Awake(){
+	public void Start(){
 		StartCoroutine(Waves());
 	}
 	public void Update(){
@@ -26,8 +25,7 @@ public class Spawner : MonoBehaviour {
 	public IEnumerator Waves(){
 		if(waves.Count == 0){
 			StartCoroutine(YouWin());
-		}else{
-			StartCoroutine(Waves());
+			yield break;
 		}
 
 		Wave nextWave = null;

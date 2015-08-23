@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour {
 			agent.updateRotation = true;
 			agent.Resume();
 			agent.SetDestination(target.transform.position);
+
 		}else if(CloseEnough){
 			PLayRest();
 			agent.updateRotation = false;
@@ -49,6 +50,7 @@ public class Enemy : MonoBehaviour {
 		if(health <= 0 && !started){
 			agent.Stop();
 			started = true;
+			agent.enabled = false;
 			StartCoroutine(DeathRoutine());
 		}
 
