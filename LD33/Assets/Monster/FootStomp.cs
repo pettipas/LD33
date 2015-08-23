@@ -111,8 +111,12 @@ public class FootStomp : MonoBehaviour {
 
 		if(hitDetected){
 			Destroyable dest = takenHit.transform.GetComponentInParent<Destroyable>();
+			Enemy enemy = takenHit.transform.GetComponentInParent<Enemy>();
 			if(dest !=null){
 				dest.health-=10;
+			}
+			if(enemy !=null){
+				enemy.health-=10;
 			}
 		}
 	}
