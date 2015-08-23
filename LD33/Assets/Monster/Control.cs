@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Control : MonoBehaviour {
 
+
+	public static Control PlayerInstance;
+
 	public FootStomp frontLeft;
 	public FootStomp frontRight;
 	public FootStomp rearLeft;
@@ -14,6 +17,12 @@ public class Control : MonoBehaviour {
 	protected float stepDuration = 2.0f;
 	[SerializeField]
 	protected float strideWidth = 2.0f;
+
+	public void Awake(){
+		if(PlayerInstance ==null){
+			PlayerInstance = this;
+		}
+	}
 
 	bool running;
 

@@ -45,7 +45,6 @@ public class Destroyable : MonoBehaviour {
 
 		if(health < 50 && !lasthitSwitch){
 			lasthitSwitch = true;
-			Debug.Log("firing last hit");
 			FireLastHit();
 		}
 
