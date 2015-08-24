@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Spawner : MonoBehaviour {
 
 	public Text timer;
+	public Text helath;
 	public float totalSeconds = 0;
 	bool deathStarted;
 	public Health hero;
@@ -49,6 +50,7 @@ public class Spawner : MonoBehaviour {
 		yield break;
 	}
 	public void Update(){
+		helath.text = hero.health +"";
 		UpdateTimer();
 		if(LoseCondition &&!deathStarted){
 			deathStarted =true;
@@ -71,7 +73,7 @@ public class Spawner : MonoBehaviour {
 		}
 		StartCoroutine(Spawn(nextWave));
 		yield return new WaitForSeconds(nextWave.timeTonext);
-		StartCoroutine(Waves());
+		yield return StartCoroutine(Waves());
 	}
 
 	public bool LoseCondition{
