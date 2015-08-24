@@ -7,7 +7,7 @@ public class StartGame : MonoBehaviour {
 	public AudioSource sound;
 	bool play;
 	public void Update(){
-		if(Input.anyKey && !play){
+		if(Input.anyKey && !play && !Input.anyKeyDown){
 			play = true;
 			StartCoroutine(Play());
 		}
