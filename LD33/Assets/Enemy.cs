@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour {
 	public Animator animaton;
 	public Transform launchPoint;
 	public GameObject target;
-	public NavMeshAgent agent;
+	public UnityEngine.AI.NavMeshAgent agent;
 	public Projectile projectile;
 	public float shotTimer;
 	public float closeenough;

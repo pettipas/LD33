@@ -64,9 +64,10 @@ public class FootStomp : MonoBehaviour {
 		stepping = false;
 	}
 	bool hitDetected = false;
+	RaycastHit takenHit;
 	public void SetHeight(){
 		detectedHeight = 0;
-		RaycastHit takenHit;
+
 		RaycastHit hit;
 		hitDetected = false;
 		if(Physics.Raycast(target.position+ new Vector3(0,0,0),-target.transform.up,out hit,Mathf.Infinity)){
